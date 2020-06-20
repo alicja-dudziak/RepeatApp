@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundDark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="40dp"
+            android:layout_marginHorizontal="20dp"
+            android:weightSum="1">
+            <TextView
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:text="English reader speed"
+                android:textSize="18dp"
+                android:textColor="@color/colorText"
+                android:layout_marginRight="10dp"
+                android:layout_weight="0.5"
+                />
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/englishSpeedProgress"
+                    android:text="5/10"
+                    android:textColor="@color/colorText"
+                    android:textAlignment="center"
+                    android:layout_marginBottom="10px"
+                    />
+                <SeekBar
+                    android:id="@+id/englishSpeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"
+                    android:min="1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="40dp"
+            android:layout_marginHorizontal="20dp"
+            android:weightSum="1">
+            <TextView
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:text="Polish reader speed"
+                android:textSize="18dp"
+                android:textColor="@color/colorText"
+                android:layout_marginRight="10dp"
+                android:layout_weight="0.5"
+                />
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/polishSpeedProgress"
+                    android:text="5/10"
+                    android:textColor="@color/colorText"
+                    android:textAlignment="center"
+                    android:layout_marginBottom="10px"
+                    />
+                <SeekBar
+                    android:id="@+id/polishSpeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"
+                    android:min="1" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

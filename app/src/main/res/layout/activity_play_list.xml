@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundDark"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/border"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/playListName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:padding="5dp"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorBackgroundLight"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Think..."
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/playListInfoText"
+        android:textSize="20dp"
+        />
+
+    <TextView
+        android:id="@+id/polishPhrase"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/play_list_edit_text"
+        android:gravity="center"
+        android:textColor="@color/colorText"
+        android:textSize="36dp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="36dp"/>
+
+    <TextView
+        android:id="@+id/englishPhrase"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/play_list_edit_text"
+        android:textColor="@color/colorText"
+        android:gravity="center"
+        android:textSize="36dp"
+        android:visibility="invisible"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="36dp"/>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/custom_progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/progressBar"
+        android:scaleY="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/confirm_icon"
+            android:layout_marginLeft="50dp"
+            android:id="@+id/skipButton"/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/pause_icon"
+            android:layout_marginLeft="70dp"
+            android:id="@+id/pauseButton"/>
+
+    </LinearLayout>
+
+</LinearLayout>

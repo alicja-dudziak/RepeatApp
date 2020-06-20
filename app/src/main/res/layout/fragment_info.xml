@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundDark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_marginHorizontal="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About Krebs Method"
+            android:textColor="@color/buttonColor"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Krebs method has been known since 1959. The point of this method is to repeat what you hear in English a couple of times to remember it well. In this way, you learn useful phrases and the English accent as well."
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30 min/day is enough to see the first results after one week. Just play a set of words and repeat what English spearer says. If you feel that you know the phrase well, click the tick icon to put this word off the current list. It will appear next time. "
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="O metodzie Krebsa"
+            android:textColor="@color/buttonColor"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Metoda Krebsa jest znana od 1959 roku. Metoda ta polega na powtarzaniu  angielskich słów kilka razy, by je dobrze zapamiętać. W ten sposób uczysz się użytecznych fraz oraz angielskiego akcentu. "
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wystarczy uczyć się 30 minut dziennie by zobaczyć pierwsze efekty po tygodniu nauki. Po prostu odwtórz zestaw słówek i powtarzaj to, co mówi angielski głos. Jeśli czujesz, że nauczyłeś się już danej frazy, kliknij na ikonę fajki by pominąć ją w bieżącej liście. Pojawi się ona następnym razem."
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

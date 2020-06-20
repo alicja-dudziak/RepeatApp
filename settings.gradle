@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':opencsv'
 rootProject.name='RepeatApp'

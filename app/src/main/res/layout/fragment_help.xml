@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundDark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_marginHorizontal="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Help"
+            android:textColor="@color/buttonColor"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This app was designed for people who like to learn English language in nonconventional way. With this app, you can learn whenever you want even when you are offline!"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Important!"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="For this application, Text-to-speech is required! If you can't hear anything or the sound is distorted, it means that you don't have TTS Polish Speaker installed on your phone. Go to AppStore or Google Store and install a proper application for your phone. Then the application should work correctly."
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pomoc"
+            android:textColor="@color/buttonColor"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ta aplikacja została zaprojektowana dla osób, które lubią uczyć się języka angielskiego w sposób niekonwencjonalny. Z tą aplikacją możesz uczyć się kiedy chcesz - nawet bez dostępu do Internetu!"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ważne!"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aplikacja wymaga funkcjonalności Text-to-speech. Jeżeli nie słyszysz odtwarzanych fiszek lub dźwięk jest zniekształcony, to znaczy, że nie masz zainstalowanej aplikacji TTS Polish Speaker. Znajdź aplikację odpowiednią dla Twojego telefonu w AppStore lub Google Store i zainstaluj ją. Wtedy aplikacja powinna działać poprawnie."
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorText"
+            />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
