@@ -14,4 +14,6 @@ public class User
     public int EnglishReaderSpeed = 4;
 
     public int PolishReaderSpeed = 4;
+
+    public int PhraseRepeatCount = 3;
 }

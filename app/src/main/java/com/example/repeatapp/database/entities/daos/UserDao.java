@@ -28,9 +28,16 @@ public interface UserDao
     @Query("SELECT PolishReaderSpeed FROM User")
     int GetPolishReaderSpeed();
 
+    @Query("SELECT PhraseRepeatCount FROM User")
+    int GetPhraseRepeatCount();
+
     @Query("UPDATE User SET EnglishReaderSpeed = :speed")
     void SetEnglishReaderSpeed(int speed);
 
     @Query("UPDATE User SET PolishReaderSpeed = :speed")
     void SetPolishReaderSpeed(int speed);
+
+    @Query("UPDATE User SET PhraseRepeatCount = :count")
+    void SetPhraseRepeatCount(int count);
+
 }

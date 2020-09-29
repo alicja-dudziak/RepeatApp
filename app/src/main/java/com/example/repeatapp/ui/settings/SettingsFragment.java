@@ -35,20 +35,27 @@ public class SettingsFragment extends Fragment
         int englishReaderSpeed = AppDatabase.getInstance(root.getContext()).userDao().GetEnglishReaderSpeed();
 
         englishSpeed.setProgress(englishReaderSpeed);
-        englishProgress.setText(englishReaderSpeed +"/"+englishSpeed.getMax());
+        englishProgress.setText(englishReaderSpeed + "/" + englishSpeed.getMax());
 
         SeekBar polishSpeed = root.findViewById(R.id.polishSpeed);
         TextView polishProgress = root.findViewById(R.id.polishSpeedProgress);
         int polishReaderSpeed = AppDatabase.getInstance(root.getContext()).userDao().GetPolishReaderSpeed();
 
         polishSpeed.setProgress(polishReaderSpeed);
-        polishProgress.setText(polishReaderSpeed +"/"+polishSpeed.getMax());
+        polishProgress.setText(polishReaderSpeed + "/" + polishSpeed.getMax());
+
+        SeekBar repeatCount = root.findViewById(R.id.repeatCount);
+        TextView repeatProgress = root.findViewById(R.id.repeatCountProgress);
+        int currentRepeatCount = AppDatabase.getInstance(root.getContext()).userDao().GetPhraseRepeatCount();
+        repeatCount.setProgress(currentRepeatCount);
+        repeatProgress.setText(currentRepeatCount + "/" + repeatCount.getMax());
     }
 
     private void CreateListeners()
     {
         CreateEnglishReaderSpeedListener();
         CreatePolishReaderSpeedListener();
+        CreateRepeatCountListener();
     }
 
     private void CreateEnglishReaderSpeedListener()
@@ -80,6 +87,25 @@ public class SettingsFragment extends Fragment
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 polishProgress.setText(progress + "/" + seekBar.getMax());
                 AppDatabase.getInstance(root.getContext()).userDao().SetPolishReaderSpeed(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+    }
+
+    private void CreateRepeatCountListener()
+    {
+        SeekBar repeatCount = root.findViewById(R.id.repeatCount);
+        final TextView repeatCountProgress = root.findViewById(R.id.repeatCountProgress);
+        repeatCount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                repeatCountProgress.setText(progress + "/" + seekBar.getMax());
+                AppDatabase.getInstance(root.getContext()).userDao().SetPhraseRepeatCount(progress);
             }
 
             @Override

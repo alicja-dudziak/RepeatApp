@@ -22,6 +22,7 @@ import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,9 @@ import com.example.repeatapp.database.entities.PhraseSet;
 import com.example.repeatapp.file.ExcelExporter;
 import com.example.repeatapp.file.FileCSV;
 
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -47,7 +51,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class EditList extends Fragment {
+public class EditList extends Fragment implements IOnBackPressed {
 
     List<Pair<Integer, LinearLayout>> phrases = new ArrayList<>();
     Set<Integer> deletedPhrases = new HashSet<>();
@@ -91,8 +95,50 @@ public class EditList extends Fragment {
         }
 
         onSharedIntent();
+        createKeyboardListener();
 
         return root;
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        HideKeyboard(this.getActivity());
+        super.onDestroy();
+    }
+
+    public static void HideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public boolean onBackPressed()
+    {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        EditList.super.onDestroy();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Are you sure to leave without saving?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+
+        return false;
     }
 
     private boolean VerifyStoragePermissions(Activity activity)
@@ -237,7 +283,7 @@ public class EditList extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         RemovePhraseSet();
-                        //finish();
+                        getFragmentManager().popBackStack();
                     }
 
                 })
@@ -350,15 +396,20 @@ public class EditList extends Fragment {
     {
         if(Validate())
         {
+            ClearFocus();
             mDialog.show();
             DeleteRemovedPhrases();
             long newPhraseSetId = SavePhraseSet();
             SavePhrases(newPhraseSetId);
             mDialog.cancel();
-            Intent myIntent = new Intent(getContext(), MainActivity.class);
-            this.startActivity(myIntent);
-            //finish();
+            this.getFragmentManager().popBackStack();
         }
+    }
+
+    private void ClearFocus()
+    {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
     private void SavePhrases(long phraseSetId)
@@ -607,5 +658,46 @@ public class EditList extends Fragment {
         edit.requestFocus();
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edit, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    private void createKeyboardListener()
+    {
+        EditText listName = root.findViewById(R.id.listName);
+        listName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus)
+                {
+                    ToggleTopBar(false);
+                }
+            }
+        });
+
+        KeyboardVisibilityEvent.setEventListener(
+                getActivity(),
+                new KeyboardVisibilityEventListener() {
+                    @Override
+                    public void onVisibilityChanged(boolean isOpen) {
+                        EditText listName = root.findViewById(R.id.listName);
+                        if(!listName.hasFocus())
+                        {
+                            ToggleTopBar(!isOpen);
+                        }
+                    }
+                });
+    }
+
+    private void ToggleTopBar(boolean isVisible)
+    {
+        int visibility = !isVisible ? View.GONE : View.VISIBLE;
+
+        if(phraseSetId > 0)
+        {
+            Button exportButton = root.findViewById(R.id.exportButton);
+            exportButton.setVisibility(visibility);
+        }
+
+        LinearLayout topBar = root.findViewById(R.id.topBar);
+        topBar.setVisibility(visibility);
     }
 }

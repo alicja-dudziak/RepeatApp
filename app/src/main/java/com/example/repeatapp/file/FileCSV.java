@@ -67,7 +67,6 @@ public class FileCSV
 
             writer = new CSVWriter(new OutputStreamWriter(stream, "UTF-8"));
             writer.writeAll(data);
-            writer.flush();
             writer.close();
         }
         catch (IOException e)

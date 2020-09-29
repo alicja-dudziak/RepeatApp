@@ -3,15 +3,19 @@ package com.example.repeatapp.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -149,6 +153,11 @@ public class HomeFragment extends Fragment {
         }
 
         setName.setTextSize(22);
+        if(setName.getText().length() > 17)
+        {
+            setName.setTextSize(16);
+        }
+
         LinearLayout.LayoutParams nameParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
         nameParams.weight = (float) 0.7;
         setName.setLayoutParams(nameParams);
