@@ -5,6 +5,11 @@ buildscript {
         google()
         jcenter()
     }
+
+    ext {
+        poiVersion = '3.17'
+    }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.3'
 

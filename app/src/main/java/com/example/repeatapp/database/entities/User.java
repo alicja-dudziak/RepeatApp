@@ -16,4 +16,8 @@ public class User
     public int PolishReaderSpeed = 4;
 
     public int PhraseRepeatCount = 3;
+
+    public double ThinkTimeMultiplier = 1.2;
+
+    public double SpeakTimeMultiplier = 1.2;
 }

@@ -49,6 +49,19 @@ public class SettingsFragment extends Fragment
         int currentRepeatCount = AppDatabase.getInstance(root.getContext()).userDao().GetPhraseRepeatCount();
         repeatCount.setProgress(currentRepeatCount);
         repeatProgress.setText(currentRepeatCount + "/" + repeatCount.getMax());
+
+        SeekBar thinkTime = root.findViewById(R.id.thinkTime);
+        TextView thinkTimeProgress = root.findViewById(R.id.thinkTimeProgress);
+        double currentThinkTime = AppDatabase.getInstance(root.getContext()).userDao().GetThinkTimeMultiplier();
+        thinkTime.setProgress(MultiplierValue.GetMultiplier(currentThinkTime));
+        thinkTimeProgress.setText(currentThinkTime + "/" + MultiplierValue.GetValue(thinkTime.getMax()));
+
+        SeekBar speakTime = root.findViewById(R.id.speakTime);
+        TextView speakTimeProgress = root.findViewById(R.id.speakTimeProgress);
+        double currentSpeakTime = AppDatabase.getInstance(root.getContext()).userDao().GetSpeakTimeMultiplier();
+        int speakTimeMultiplier = MultiplierValue.GetMultiplier(currentSpeakTime);
+        speakTime.setProgress(speakTimeMultiplier);
+        speakTimeProgress.setText(currentSpeakTime + "/" + MultiplierValue.GetValue(speakTime.getMax()));
     }
 
     private void CreateListeners()
@@ -56,6 +69,8 @@ public class SettingsFragment extends Fragment
         CreateEnglishReaderSpeedListener();
         CreatePolishReaderSpeedListener();
         CreateRepeatCountListener();
+        CreateThinkTimeListener();
+        CreateSpeakTimeListener();
     }
 
     private void CreateEnglishReaderSpeedListener()
@@ -106,6 +121,46 @@ public class SettingsFragment extends Fragment
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 repeatCountProgress.setText(progress + "/" + seekBar.getMax());
                 AppDatabase.getInstance(root.getContext()).userDao().SetPhraseRepeatCount(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+    }
+
+    private void CreateThinkTimeListener()
+    {
+        SeekBar thinkTime = root.findViewById(R.id.thinkTime);
+        final TextView thinkTimeProgress = root.findViewById(R.id.thinkTimeProgress);
+        thinkTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                double multiplier = MultiplierValue.GetValue(progress);
+                thinkTimeProgress.setText(multiplier + "/" + MultiplierValue.GetValue(seekBar.getMax()));
+                AppDatabase.getInstance(root.getContext()).userDao().SetThinkTimeMultiplier(multiplier);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+    }
+
+    private void CreateSpeakTimeListener()
+    {
+        SeekBar speakTime = root.findViewById(R.id.speakTime);
+        final TextView speakTimeProgress = root.findViewById(R.id.speakTimeProgress);
+        speakTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                double multiplier = MultiplierValue.GetValue(progress);
+                speakTimeProgress.setText(multiplier + "/" + MultiplierValue.GetValue(seekBar.getMax()));
+                AppDatabase.getInstance(root.getContext()).userDao().SetSpeakTimeMultiplier(multiplier);
             }
 
             @Override

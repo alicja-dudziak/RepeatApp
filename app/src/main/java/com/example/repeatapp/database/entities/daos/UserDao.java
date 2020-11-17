@@ -31,6 +31,12 @@ public interface UserDao
     @Query("SELECT PhraseRepeatCount FROM User")
     int GetPhraseRepeatCount();
 
+    @Query("SELECT SpeakTimeMultiplier FROM User")
+    double GetSpeakTimeMultiplier();
+
+    @Query("SELECT ThinkTimeMultiplier FROM User")
+    double GetThinkTimeMultiplier();
+
     @Query("UPDATE User SET EnglishReaderSpeed = :speed")
     void SetEnglishReaderSpeed(int speed);
 
@@ -40,4 +46,9 @@ public interface UserDao
     @Query("UPDATE User SET PhraseRepeatCount = :count")
     void SetPhraseRepeatCount(int count);
 
+    @Query("UPDATE User SET SpeakTimeMultiplier = :multiplier")
+    void SetSpeakTimeMultiplier(double multiplier);
+
+    @Query("UPDATE User SET ThinkTimeMultiplier = :multiplier")
+    void SetThinkTimeMultiplier(double multiplier);
 }

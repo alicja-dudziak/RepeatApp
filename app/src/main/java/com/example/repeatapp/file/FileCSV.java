@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,8 @@ public class FileCSV
         List result = new ArrayList();
         String delimiter = null;
 
-        BufferedReader fileReader = new BufferedReader(new InputStreamReader(stream));
+        BufferedReader fileReader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
+
         try
         {
             String csvLine;

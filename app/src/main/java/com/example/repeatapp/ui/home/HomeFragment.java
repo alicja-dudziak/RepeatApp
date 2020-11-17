@@ -1,55 +1,79 @@
 package com.example.repeatapp.ui.home;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
-import android.util.TypedValue;
+import android.speech.tts.TextToSpeech;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.repeatapp.EditList;
 import com.example.repeatapp.MainActivity;
-import com.example.repeatapp.PlayList;
 import com.example.repeatapp.R;
 import com.example.repeatapp.database.AppDatabase;
 import com.example.repeatapp.database.entities.PhraseSet;
 
 import java.util.List;
+import java.util.Locale;
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
     private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+
         root = inflater.inflate(R.layout.fragment_home, container, false);
 
         CreateSets();
         AddButtonListener();
+        CheckTextToSpeech();
 
         return root;
+    }
+
+    TextToSpeech tts = null;
+
+    private void CheckTextToSpeech() {
+        tts = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                Locale language = Locale.forLanguageTag("PL");
+                int availability = tts.isLanguageAvailable(language);
+
+                if(availability != 0) {
+                    new AlertDialog.Builder(getContext(), AlertDialog.THEME_HOLO_DARK)
+                            .setTitle("Warning")
+                            .setMessage("Please install polish language to use this app.")
+                            .setNegativeButton(android.R.string.no, null)
+                            .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent();
+                                    intent.setAction("com.android.settings.TTS_SETTINGS");
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivityForResult(intent, 0);
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+
+                tts.shutdown();
+                tts = null;
+            }
+        });
     }
 
     @Override
@@ -172,7 +196,7 @@ public class HomeFragment extends Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditPhraseSet(set, context);
+                EditPhraseSet(set);
             }
         });
 
@@ -186,7 +210,7 @@ public class HomeFragment extends Fragment {
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PlaySet(set, context);
+                PlaySet(set);
             }
         });
 
@@ -208,7 +232,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void PlaySet(PhraseSet set, Context context)
+    private void PlaySet(PhraseSet set)
     {
         Bundle bundle = new Bundle();
         bundle.putLong("PhraseSetId", set.PhraseSetId);
@@ -216,7 +240,7 @@ public class HomeFragment extends Fragment {
         MainActivity.navController.navigate(R.id.nav_play_list, bundle);
     }
 
-    private void EditPhraseSet(PhraseSet set, Context context)
+    private void EditPhraseSet(PhraseSet set)
     {
         Bundle bundle = new Bundle();
         bundle.putLong("PhraseSetId", set.PhraseSetId);

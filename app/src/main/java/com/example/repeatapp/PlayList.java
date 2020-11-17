@@ -2,22 +2,15 @@ package com.example.repeatapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +22,7 @@ import android.widget.Toast;
 import com.example.repeatapp.database.AppDatabase;
 import com.example.repeatapp.database.entities.Phrase;
 import com.example.repeatapp.database.entities.PhraseSet;
+import com.example.repeatapp.ui.settings.MultiplierValue;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,38 +33,40 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 
 public class PlayList extends Fragment
 {
 
-    long phraseSetId;
-    List<Phrase> phrases;
-    int currentPhrase = 0;
-    TextView polishPhrase;
-    TextView englishPhrase;
-    TextView info;
-    TextToSpeech polishTts;
-    TextToSpeech englishTts;
-    ProgressBar progressBar;
-    boolean isGameInProgress;
-    Handler hdlr = new Handler();
-    boolean pauseTheGameDelay;
-    Instant gameStartTime;
-    Instant startPauseTime;
-    int pauseDuration = 0;
-    View root;
-    Thread gameThread;
-    boolean isWaitingForSpeaker = false;
-    HashMap<String, String> ttsParams = new HashMap<>();
-    boolean isInitialStart = true;
-    Instant speakingStartTime;
-    Instant speakingEndTime;
-    int repeatCount;
-    int counter = 1;
-    UUID loopGuid;
+    private long phraseSetId;
+    private List<Phrase> phrases;
+    private int currentPhrase = 0;
+    private TextView polishPhrase;
+    private TextView englishPhrase;
+    private TextView info;
+    private TextToSpeech polishTts;
+    private TextToSpeech englishTts;
+    private ProgressBar progressBar;
+    private boolean isGameInProgress;
+    private Handler hdlr = new Handler();
+    private boolean pauseTheGameDelay;
+    private Instant gameStartTime;
+    private Instant startPauseTime;
+    private int pauseDuration = 0;
+    private View root;
+    private Thread gameThread;
+    private boolean isWaitingForSpeaker = false;
+    private HashMap<String, String> ttsParams = new HashMap<>();
+    private boolean isInitialStart = true;
+    private Instant speakingStartTime;
+    private Instant speakingEndTime;
+    private int repeatCount;
+    private int counter = 1;
+    private UUID loopGuid;
+    private double thinkTimeMultiplier;
+    private double speakTimeMultiplier;
+    private boolean isSecondTimeEnglishPhrase = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -88,6 +84,8 @@ public class PlayList extends Fragment
 
         repeatCount = AppDatabase.getInstance(getContext()).userDao().GetPhraseRepeatCount();
         UpdateRepeatCounter();
+        thinkTimeMultiplier = MultiplierValue.GetMultiplierRaisedValue(AppDatabase.getInstance(getContext()).userDao().GetThinkTimeMultiplier());
+        speakTimeMultiplier = MultiplierValue.GetMultiplierRaisedValue(AppDatabase.getInstance(getContext()).userDao().GetSpeakTimeMultiplier());
 
         ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "utteranceId");
 
@@ -265,7 +263,8 @@ public class PlayList extends Fragment
 
                     int polishReaderSpeed = AppDatabase.getInstance(getContext()).userDao().GetPolishReaderSpeed();
 
-                    polishTts.setLanguage(Locale.forLanguageTag("pl"));
+                    Locale language = Locale.forLanguageTag("PL");
+                    polishTts.setLanguage(language);
                     polishTts.setSpeechRate((float)0.2 * polishReaderSpeed);
                     isGameInProgress = true;
 
@@ -314,9 +313,9 @@ public class PlayList extends Fragment
 
         speakingEndTime = Instant.now();
         Duration timeElapsed = Duration.between(speakingStartTime, speakingEndTime);
-        long miliSeconds = timeElapsed.toMillis();
+        long milliSeconds = Math.round(timeElapsed.toMillis() * thinkTimeMultiplier);
 
-        ShowProgressBar(miliSeconds);
+        ShowProgressBar(milliSeconds);
         EnglishPhrase();
     }
 
@@ -331,9 +330,9 @@ public class PlayList extends Fragment
         UUID currentLoopGuid = loopGuid;
         speakingEndTime = Instant.now();
         Duration timeElapsed = Duration.between(speakingStartTime, speakingEndTime);
-        long miliSeconds = timeElapsed.toMillis();
+        long milliSeconds = Math.round(timeElapsed.toMillis() * speakTimeMultiplier);
 
-        ShowProgressBar(miliSeconds);
+        ShowProgressBar(milliSeconds);
 
         try {
             Thread.sleep(1000);
@@ -343,7 +342,14 @@ public class PlayList extends Fragment
             e.printStackTrace();
         }
 
-        NextPhrase(currentLoopGuid);
+        if(!isSecondTimeEnglishPhrase) {
+            EnglishPhrase();
+            isSecondTimeEnglishPhrase = true;
+        }
+        else {
+            NextPhrase(currentLoopGuid);
+            isSecondTimeEnglishPhrase = false;
+        }
     }
 
     private void StartTheGame()
@@ -362,19 +368,19 @@ public class PlayList extends Fragment
         gameThread.start();
     }
 
-    private void ShowProgressBar(long miliSeconds)
+    private void ShowProgressBar(long milliSeconds)
     {
         if(!isGameInProgress)
         {
             return;
         }
 
-        if(miliSeconds < 1500)
+        if(milliSeconds < 1500)
         {
-            miliSeconds = 1500;
+            milliSeconds = 1500;
         }
 
-        for(int i=0; i < 100; i++)
+        for(int i=0; i <= 100; i++)
         {
             if(!isGameInProgress)
             {
@@ -394,7 +400,7 @@ public class PlayList extends Fragment
                 }
             });
             try {
-                Thread.sleep(miliSeconds / 100);
+                Thread.sleep(milliSeconds / 100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -416,6 +422,7 @@ public class PlayList extends Fragment
                     info.setText("Listen...");
                     englishPhrase.setText(phrase.PhraseText);
                     englishTts.speak(phrase.PhraseText, TextToSpeech.QUEUE_ADD, ttsParams);
+
                     phrase.RepeatedCount++;
                 }
                 else {

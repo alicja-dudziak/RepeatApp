@@ -58,7 +58,7 @@ public class ImportFragment extends Fragment
         Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT);
 
         intent.setType("*/*");
-        String[] mimeTypes = {"application/excel", "text/csv", "text/xls", "application/vnd.ms-excel", "application/x-excel", "application/x-msexcel"};
+        String[] mimeTypes = {"application/excel", "text/csv", "text/xls", "application/vnd.ms-excel", "application/x-excel", "application/x-msexcel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"};
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
 
         startActivityForResult(Intent.createChooser(intent, "Select a file"), 123);
