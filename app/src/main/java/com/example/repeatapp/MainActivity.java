@@ -10,7 +10,6 @@ import com.example.repeatapp.database.AppDatabase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import android.speech.tts.TextToSpeech;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;

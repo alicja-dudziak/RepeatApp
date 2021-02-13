@@ -28,13 +28,14 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
+import jxl.WorkbookSettings;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+
 public class ExcelExporter {
 
-    public static void Export(String filePath, List<String[]> data)
-    {
 
-    }
-    /*
     public static void Export(String filePath, List<String[]> data)
     {
         try {
@@ -42,7 +43,7 @@ public class ExcelExporter {
             WorkbookSettings wbSettings = new WorkbookSettings();
             wbSettings.setLocale(new Locale(Locale.forLanguageTag("pl").getLanguage(), Locale.forLanguageTag("pl").getCountry()));
             WritableWorkbook workbook;
-            workbook = Workbook.createWorkbook(file, wbSettings);
+            workbook = jxl.Workbook.createWorkbook(file, wbSettings);
 
             WritableSheet sheet = workbook.createSheet( "RepeatApp", 0);
 
@@ -64,6 +65,7 @@ public class ExcelExporter {
         }
     }
 
+    /*
     public static List Import(InputStream stream)
     {
         Workbook workbook= null;

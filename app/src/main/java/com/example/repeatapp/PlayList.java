@@ -57,7 +57,8 @@ public class PlayList extends Fragment
     private View root;
     private Thread gameThread;
     private boolean isWaitingForSpeaker = false;
-    private HashMap<String, String> ttsParams = new HashMap<>();
+    private HashMap<String, String> polishTtsParams = new HashMap<>();
+    private HashMap<String, String> englishTtsParams = new HashMap<>();
     private boolean isInitialStart = true;
     private Instant speakingStartTime;
     private Instant speakingEndTime;
@@ -87,7 +88,8 @@ public class PlayList extends Fragment
         thinkTimeMultiplier = MultiplierValue.GetMultiplierRaisedValue(AppDatabase.getInstance(getContext()).userDao().GetThinkTimeMultiplier());
         speakTimeMultiplier = MultiplierValue.GetMultiplierRaisedValue(AppDatabase.getInstance(getContext()).userDao().GetSpeakTimeMultiplier());
 
-        ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "utteranceId");
+        polishTtsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "polishUtteranceId");
+        englishTtsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "englishUtteranceId");
 
         SetTitle();
         GetPhrases();
@@ -263,8 +265,7 @@ public class PlayList extends Fragment
 
                     int polishReaderSpeed = AppDatabase.getInstance(getContext()).userDao().GetPolishReaderSpeed();
 
-                    Locale language = Locale.forLanguageTag("PL");
-                    polishTts.setLanguage(language);
+                    polishTts.setLanguage(Locale.forLanguageTag("pl"));
                     polishTts.setSpeechRate((float)0.2 * polishReaderSpeed);
                     isGameInProgress = true;
 
@@ -296,7 +297,7 @@ public class PlayList extends Fragment
 
                     int englishReaderSpeed = AppDatabase.getInstance(getContext()).userDao().GetEnglishReaderSpeed();
 
-                    englishTts.setLanguage(Locale.ENGLISH);
+                    //englishTts.setLanguage(Locale.ENGLISH);
                     englishTts.setSpeechRate((float)0.2 * englishReaderSpeed);
                 }
             }
@@ -359,6 +360,7 @@ public class PlayList extends Fragment
         {
             return;
         }
+
         loopGuid = UUID.randomUUID();
         gameThread = new Thread(new Runnable() {
             public void run() {
@@ -417,11 +419,12 @@ public class PlayList extends Fragment
                 }
 
                 if(!polishTts.isSpeaking()) {
+                    englishTts.setLanguage(Locale.ENGLISH);
                     Phrase phrase = phrases.get(currentPhrase);
                     englishPhrase.setVisibility(View.VISIBLE);
                     info.setText("Listen...");
                     englishPhrase.setText(phrase.PhraseText);
-                    englishTts.speak(phrase.PhraseText, TextToSpeech.QUEUE_ADD, ttsParams);
+                    englishTts.speak(phrase.PhraseText, TextToSpeech.QUEUE_ADD, englishTtsParams);
 
                     phrase.RepeatedCount++;
                 }
@@ -537,13 +540,14 @@ public class PlayList extends Fragment
         }
 
         if(isInitialStart || !englishTts.isSpeaking()) {
+            polishTts.setLanguage(Locale.forLanguageTag("pl"));
             SetSkippButtonColor(false);
             isInitialStart = false;
             englishPhrase.setVisibility(View.INVISIBLE);
 
             Phrase phrase = phrases.get(currentPhrase);
             polishPhrase.setText(phrase.TranslatedPhrase);
-            polishTts.speak(phrase.TranslatedPhrase, TextToSpeech.QUEUE_ADD, ttsParams);
+            polishTts.speak(phrase.TranslatedPhrase, TextToSpeech.QUEUE_ADD, polishTtsParams);
             progressBar.setVisibility(View.VISIBLE);
             progressBar.setProgress(0);
         }

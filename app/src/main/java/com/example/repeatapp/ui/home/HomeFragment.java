@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+
     TextToSpeech tts = null;
 
     private void CheckTextToSpeech() {
@@ -70,6 +71,7 @@ public class HomeFragment extends Fragment {
                             .show();
                 }
 
+                tts.stop();
                 tts.shutdown();
                 tts = null;
             }
